@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\Timestampable;
 use App\Repository\PostRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -12,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Post
 {
+    use Timestampable;
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
