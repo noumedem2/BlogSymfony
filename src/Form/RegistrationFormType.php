@@ -17,9 +17,12 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('firstName')
+            ->add('lastName')
             ->add('email')
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
+                'label' => 'I consent to the privacy and terms of service.',
                 'constraints' => [
                     new IsTrue([
                         'message' => 'You should agree to our terms.',
@@ -36,13 +39,13 @@ class RegistrationFormType extends AbstractType
                     ]),
                     new Length([
                         'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
+                        'minMessage' =>
+                            'Your password should be at least {{ limit }} characters',
                         // max length allowed by Symfony for security reasons
                         'max' => 4096,
                     ]),
                 ],
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
