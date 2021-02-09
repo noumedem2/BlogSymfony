@@ -21,6 +21,10 @@ class AccountController extends AbstractController
      */
     public function show(): Response
     {
+        if (!$this->getUser()) {
+            $this->addFlash('error', 'You need to log in first!');
+            return $this->redirectToRoute('post_index');
+        }
         return $this->render('account/show.html.twig', []);
     }
     /**
@@ -28,6 +32,10 @@ class AccountController extends AbstractController
      */
     public function edit(Request $request, EntityManagerInterface $em): Response
     {
+        if (!$this->getUser()) {
+            $this->addFlash('error', 'You need to log in first!');
+            return $this->redirectToRoute('post_index');
+        }
         $user = $this->getUser();
         $form = $this->createForm(UserFormType::class, $user);
         $form->handleRequest($request);
@@ -47,9 +55,13 @@ class AccountController extends AbstractController
         EntityManagerInterface $em,
         UserPasswordEncoderInterface $passwordEncoder
     ): Response {
+        if (!$this->getUser()) {
+            $this->addFlash('error', 'You need to log in first!');
+            return $this->redirectToRoute('post_index');
+        }
         $user = $this->getUser();
-        $form = $this->createForm(ChangePasswordFormType::class,null,[
-            'current_password_is_required' => true
+        $form = $this->createForm(ChangePasswordFormType::class, null, [
+            'current_password_is_required' => true,
         ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -57,9 +69,8 @@ class AccountController extends AbstractController
             $password = $passwordEncoder->encodePassword($user, $password);
             $user->setPassword($password);
             $em->flush();
-            $this->addFlash('success','Password updated successfully');
+            $this->addFlash('success', 'Password updated successfully');
             return $this->redirectToRoute('app_account');
-    
         }
         $form = $form->createView();
         return $this->render(
