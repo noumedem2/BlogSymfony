@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Error 403{% endblock %}
+
+{% block body %}
+<h1> Acces Forbidden</h1>
+<p>
+You cannot access this page. Go back to <a href="{{path('post_index')}}">Posts</a>
+</p>
+{% endblock %}

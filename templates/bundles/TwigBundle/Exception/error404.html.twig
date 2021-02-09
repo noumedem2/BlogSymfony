@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+  Error 404
+{% endblock %}
+
+{% block body %}
+  <h1>
+    Page not Found
+  </h1>
+  <p>
+     Go back to <a href="{{ path('post_index') }}">Posts</a>
+  </p>
+{% endblock %}
