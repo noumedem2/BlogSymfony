@@ -213,4 +213,16 @@ class User implements UserInterface
 
         return $this;
     }
+    public function getFullName()
+    {
+        return "$this->lastName $this->firstName";
+    }
+
+    public function getGravatar($size = 200)
+    {
+        return 'https://www.gravatar.com/avatar/' .
+            md5(strtolower(trim($this->getEmail()))) .
+            '/?s=' .
+            $size;
+    }
 }
