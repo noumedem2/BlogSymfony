@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 /**
  * @Route("/post")
  */
@@ -27,17 +27,10 @@ class PostController extends AbstractController
 
     /**
      * @Route("/new", name="post_new", methods={"GET","POST"})
+     * @Security("is_granted('POST_CREATE')")
      */
     public function new(Request $request): Response
     {
-        if (!$this->getUser()) {
-            $this->addFlash('error', 'You need to log in first!');
-            return $this->redirectToRoute('app_login');
-        }
-        if (!$this->getUser()->isVerified()) {
-            $this->addFlash('error', 'You need to have a verified account!');
-            return $this->redirectToRoute('post_index');
-        }
         $post = new Post();
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
@@ -69,21 +62,10 @@ class PostController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="post_edit", methods={"GET","POST"})
+     * @Security("is_granted('POST_MANAGE',post)")
      */
     public function edit(Request $request, Post $post): Response
     {
-        if (!$this->getUser()) {
-            $this->addFlash('error', 'You need to log in first!');
-            return $this->redirectToRoute('app_login');
-        }
-        if (!$this->getUser()->isVerified()) {
-            $this->addFlash('error', 'You need to have a verified account!');
-            return $this->redirectToRoute('post_index');
-        }
-        if ($post->getUser() != $this->getUser()) {
-            $this->addFlash('error', 'Acces Forbidden!');
-            return $this->redirectToRoute('post_index');
-        }
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
 
@@ -104,21 +86,10 @@ class PostController extends AbstractController
 
     /**
      * @Route("/{id}", name="post_delete", methods={"DELETE"})
+     * @Security("is_granted('POST_MANAGE',post)")
      */
     public function delete(Request $request, Post $post): Response
     {
-        if (!$this->getUser()) {
-            $this->addFlash('error', 'You need to log in first!');
-            return $this->redirectToRoute('app_login');
-        }
-        if (!$this->getUser()->isVerified()) {
-            $this->addFlash('error', 'You need to have a verified account!');
-            return $this->redirectToRoute('post_index');
-        }
-        if ($post->getUser() != $this->getUser()) {
-            $this->addFlash('error', 'Acces Forbidden!');
-            return $this->redirectToRoute('post_index');
-        }
         if (
             $this->isCsrfTokenValid(
                 'delete' . $post->getId(),
