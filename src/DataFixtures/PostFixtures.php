@@ -20,11 +20,11 @@ class PostFixtures extends Fixture
         $manager->persist($user);
         $manager->flush();
 
-        $faker = Factory::create('fr-Fr');
+        $faker = Factory::create('fr_FR');
         for ($i=0; $i < 100; $i++) { 
             $post = new Post();
-            $post->setTitle($faker->sentence());
-            $post->setDescription($faker->text(1000));
+            $post->setTitle($faker->word(3,true));
+            $post->setDescription($faker->sentence(3,true));
             $post->setUser($user);
             $manager->persist($post);
             $manager->flush();

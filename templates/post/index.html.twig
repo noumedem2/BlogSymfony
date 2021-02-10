@@ -1,46 +1,27 @@
-{% extends 'base.html.twig' %}
+{% extends 'layouts/base.html.twig' %}
 
 {% block title %}Post index{% endblock %}
 
 {% block body %}
-<h1>Post index</h1>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Autor</th>
-            <th>CreatedAt</th>
-            <th>UpdatedAt</th>
-            <th>actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for post in posts %}
-        <tr>
-            <td>{{ post.id }}</td>
-            <td>{{ post.title }}</td>
-            <td>{{ post.description }}</td>
-            <td style="font-weight: bold;">{{ post.user.fullName }}</td>
-            <td>{{ post.createdAt ? post.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            <td>{{ post.updatedAt ? post.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-            <td>
-                <a href="{{ path('post_show', {'id': post.id}) }}">show</a>
-                {% if is_granted('POST_MANAGE',post) %}
-                <a href="{{ path('post_edit', {'id': post.id}) }}">edit</a>
-                {% endif %}
-            </td>
+{% if posts|length > 0 %}
+<h1 class="mb-4 text-center text-muted">{{ pluralize(posts|length, 'Post') }}</h1>
 
-        </tr>
-        {% else %}
-        <tr>
-            <td colspan="6">no records found</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-<a href="{{ path('post_new') }}">Create new</a>
+{% for row in posts|batch(3) %}
+<div class="row mb-5">
+    {% for post in row %}
+    <div class="col-md-4">
+        <article class="post bg-white rounded shadow">
+            <h2 class="h5 pl-3 pt-3"><a href="{{ path('post_show', {id: post.id}) }}"
+                    class="text-secondary text-decoration-none">{{ post.title }}</a></h2>
+                    <p class="p-3">{{ CutText(post.description,5) }}</p>
+            <p class="d-flex justify-content-around align-items-center  pl-3 pb-3 text-muted"><small>Submitted by {{ post.user.fullName }}</small> <a class="btn btn-primary" href="{{ path('post_show', {id: post.id}) }}"> Lire Article</a> </p>
+        </article>
+    </div>
+    {% endfor %}
+</div>
+{% endfor %}
+{% else %}
+no records found
+{% endif %}
 {% endblock %}

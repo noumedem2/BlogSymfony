@@ -1,0 +1,24 @@
+<nav class="navbar  navbar-expand-sm navbar-dark bg-dark">
+    <a class="navbar-brand  " href="{{ path('post_index') }}">Mon Super site</a>
+    <ul class="navbar-nav mr-auto">
+        <!-- <li>
+            <a class="nav-link" href="{{ path('post_index') }}">Articles</a>
+        </li> -->
+    </ul>
+    <div class="navbar-nav">
+        {% if app.user %}
+        <div class="navbar-text mr-4"><a href="{{ path('post_new') }}">New Post</a></div>
+        <div class="navbar-text mr-4"><a href="{{ path('app_account') }}">Account</a></div>
+        <div class="navbar-text mr-4"><a href="{{ path('app_logout') }}">logout</a></div>
+        {% else %}
+        <div class="d-flex">
+            <li>
+                <a class="nav-link" href="{{ path('app_register') }}">S'inscrire</a>
+            </li>
+            <li>
+                <a class="nav-link" href="{{ path('app_login') }}">Se connecter</a>
+            </li>
+        </div>
+        {% endif %}
+    </div>
+</nav>
