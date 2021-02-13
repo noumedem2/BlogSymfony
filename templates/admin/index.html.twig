@@ -1,7 +1,15 @@
-{% extends 'base.html.twig' %}
+{% extends 'layouts/base.html.twig' %}
 
 {% block title %}Hello AdminController!{% endblock %}
 
 {% block body %}
-<h1>Admin<h1>
+<h1 class="text-center">DashBoard<h1>
+
+<div class="card" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title">Article  <span class="badge badge-secondary">{{ posts }}</span></h5>
+    <a href="{{ path('app_admin_posts_index') }}" class="btn btn-primary">Gerer les articles</a>
+  </div>
+</div>
+
 {% endblock %}

@@ -7,7 +7,7 @@
     </ul>
     <div class="navbar-nav">
         {% if app.user %}
-        <div class="navbar-text mr-4"><a href="{{ path('post_new') }}">New Post</a></div>
+        <div class="navbar-text mr-4"><a href="{{ path('app_admin_post_new') }}">New Post</a></div>
         <div class="navbar-text mr-4"><a href="{{ path('app_account') }}">Account</a></div>
         <div class="navbar-text mr-4"><a href="{{ path('app_logout') }}">logout</a></div>
         {% else %}
