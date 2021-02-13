@@ -5,11 +5,14 @@ namespace App\Entity;
 use App\Entity\Traits\Timestampable;
 use App\Repository\PostRepository;
 use Doctrine\ORM\Mapping as ORM;
-
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=PostRepository::class)
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="posts")
+ * @Vich\Uploadable
  */
 class Post
 {
@@ -36,6 +39,23 @@ class Post
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $imageName;
+        
+    /**
+     * @Vich\UploadableField(mapping="post_image", fileNameProperty="imageName", size="imageSize")
+     * @var File|null
+     *  @Assert\File(maxSize="8M")
+     */
+    private $imageFile;
+    
+    /**
+     * @var int|null
+     */
+    private $imageSize; 
 
     public function getId(): ?int
     {
@@ -77,4 +97,44 @@ class Post
 
         return $this;
     }
+
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
+    }
+
+    public function setImageName(?string $imageName): self
+    {
+        $this->imageName = $imageName;
+
+        return $this;
+    }
+    
+    /**
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile|null $imageFile
+     */
+    public function setImageFile(?File $imageFile = null): void
+    {
+        $this->imageFile = $imageFile;
+        
+        if (null !== $imageFile) {
+            $this->setUpdatedAt( new \DateTimeImmutable());
+        }
+    }
+    
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+    
+    public function setImageSize(?int $imageSize): void
+    {
+        $this->imageSize = $imageSize;
+    }
+    
+    public function getImageSize(): ?int
+    {
+        return $this->imageSize;
+    }
+    
 }
